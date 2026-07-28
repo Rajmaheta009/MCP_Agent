@@ -1,21 +1,9 @@
 from mcp.server.fastmcp import FastMCP
+from services.currency_service import convert_currency as service_convert_currency
 
 
-def register_currency_tools(mcp: FastMCP):
-
+def register_currency_tools(mcp: FastMCP) -> None:
     @mcp.tool()
-    def convert_currency(
-        amount: float,
-        from_currency: str,
-        to_currency: str
-    ) -> str:
-        """
-        Currency Converter
-        (Implementation coming later)
-        """
-        return (
-            f"Currency conversion is under development.\n"
-            f"Amount: {amount}\n"
-            f"From: {from_currency}\n"
-            f"To: {to_currency}"
-        )
+    async def convert_currency(amount: float, from_currency: str, to_currency: str) -> dict:
+        """Convert an amount using current Frankfurter exchange-rate data."""
+        return await service_convert_currency(amount, from_currency, to_currency)

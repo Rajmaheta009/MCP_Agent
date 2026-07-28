@@ -1,493 +1,170 @@
 # 🤖 Raj Assistant MCP
 
-> A modular AI Assistant built using the **Model Context Protocol (MCP)** that provides calculator, weather, news, AI chat, currency conversion, document processing, and future RAG capabilities.
+A modular **Model Context Protocol (MCP)** server built with Python. This project is designed to work with MCP Inspector and other MCP-compatible clients.
 
----
+## What is implemented
 
-# 📌 Overview
+- Calculator: add, subtract, multiply, divide, percentage
+- Date/time with IANA timezones
+- Current weather using Open-Meteo
+- News using NewsData.io
+- Currency conversion using Frankfurter
+- Gemini AI chat
+- PDF, DOCX, TXT, MD, CSV, XLSX and basic image file reading
+- Local RAG document indexing and semantic search with ChromaDB
+- Clean service/tool separation
+- Environment-based configuration
+- Basic tests
 
-Raj Assistant MCP is a production-style MCP Server built with Python.
+## Architecture
 
-The goal of this project is to learn and demonstrate the complete MCP ecosystem by creating a modular AI assistant that can expose multiple tools to any MCP-compatible AI client such as:
-
-- MCP Inspector
-- Claude Desktop
-- VS Code MCP
-- Cursor AI
-- Future MCP Clients
-
-Instead of placing every tool inside one file, this project follows a scalable architecture similar to real backend applications.
-
----
-
-# 🚀 Features
-
-## ✅ Current Features
-
-- Calculator
-    - Add
-    - Subtract
-    - Multiply
-    - Divide
-
-- Date & Time
-    - Current Date
-    - Current Time
-    - Current DateTime
-
-- Modular Architecture
-
-- MCP Inspector Support
-
-- Environment Configuration (.env)
-
----
-
-## 🚧 Upcoming Features
-
-### Weather
-
-- Current Weather
-- Forecast
-- Humidity
-- Wind Speed
-
-### News
-
-- Top Headlines
-- Category News
-- Country News
-
-### AI Chat
-
-- OpenAI
-- Gemini
-- Ollama
-- OpenRouter
-
-### Currency
-
-- Currency Conversion
-- Exchange Rates
-
-### File Processing
-
-- PDF Reader
-- DOCX Reader
-- Excel Reader
-- Image Reader
-
-### Database
-
-- PostgreSQL
-- MongoDB
-- SQLite
-
-### RAG
-
-- Vector Database
-- Embeddings
-- Document Chat
-
-### AI Agent
-
-- Automatic Tool Selection
-- Multi-step Reasoning
-- Tool Chaining
-
----
-
-# 📂 Project Structure
-
-```
-AI_MCP/
-│
-├── .venv/
-│
-├── server.py
-├── config.py
-├── requirements.txt
-├── README.md
-├── .env
-│
-├── tools/
-│   ├── __init__.py
-│   ├── calculator.py
-│   ├── datetime.py
-│   ├── weather.py
-│   ├── news.py
-│   ├── currency.py
-│   ├── chat.py
-│   ├── pdf.py
-│   ├── excel.py
-│   └── image.py
-│
-├── services/
-│   ├── __init__.py
-│   ├── weather_service.py
-│   ├── news_service.py
-│   ├── ai_service.py
-│   ├── currency_service.py
-│   └── pdf_service.py
-│
-├── database/
-│   ├── postgres.py
-│   ├── mongodb.py
-│   └── sqlite.py
-│
-├── rag/
-│   ├── embedding.py
-│   ├── vector_store.py
-│   └── retriever.py
-│
-├── utils/
-│   ├── logger.py
-│   ├── helper.py
-│   └── validator.py
-│
-└── tests/
+```text
+MCP Client / Inspector
+        |
+        v
+   server.py
+        |
+        +-------------------+
+        |                   |
+     MCP Tools          Services
+        |                   |
+        +---------+---------+
+                  |
+       External APIs / Chroma
+                  |
+              Local files
 ```
 
----
+## 1. Setup on Windows
 
-# 🏗 Architecture
-
-```
-                User
-
-                  │
-
-                  ▼
-
-          MCP Client
- (Inspector / Claude / Cursor)
-
-                  │
-
-                  ▼
-
-          Raj Assistant MCP
-
-                  │
-
-      ┌───────────┼────────────┐
-      │           │            │
-      ▼           ▼            ▼
-
- Calculator   Weather      AI Chat
-
-      │           │            │
-      ▼           ▼            ▼
-
- Services    Services    AI Services
-
-      │           │            │
-      ▼           ▼            ▼
-
- External APIs / Database / AI Models
-```
-
----
-
-# 🔄 MCP Workflow
-
-```
-User
-
-↓
-
-MCP Client
-
-↓
-
-tools/list
-
-↓
-
-Raj Assistant
-
-↓
-
-Available Tools
-
-↓
-
-AI Chooses Tool
-
-↓
-
-tools/call
-
-↓
-
-Python Function
-
-↓
-
-Response
-
-↓
-
-AI
-
-↓
-
-User
-```
-
----
-
-# 🧠 Learning Objectives
-
-This project demonstrates:
-
-- Model Context Protocol (MCP)
-- Modular Software Architecture
-- Python Development
-- API Integration
-- AI Integration
-- Service Layer Pattern
-- Environment Configuration
-- Tool Registration
-- MCP Inspector
-- RAG Architecture
-- AI Agent Design
-
----
-
-# ⚙️ Installation
-
-## Clone Repository
-
-```bash
-git clone https://github.com/yourusername/AI_MCP.git
-
-cd AI_MCP
-```
-
----
-
-## Create Virtual Environment
-
-Windows
-
-```bash
+```powershell
 python -m venv .venv
-```
-
-Activate
-
-```bash
-.venv\Scripts\activate
-```
-
-Linux / macOS
-
-```bash
-source .venv/bin/activate
-```
-
----
-
-## Install Dependencies
-
-```bash
+.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+copy .env.example .env
 ```
 
----
+Edit `.env` and add your own `NEWS_API_KEY` and `GEMINI_API_KEY`.
 
-# 🔑 Environment Variables
+> **Security:** The old uploaded project contained API keys in `.env`. Rotate/revoke those keys and never commit `.env` to Git.
 
-Create a `.env` file
+## 2. Run normally
 
-```env
-PROJECT_NAME=Raj Assistant
-VERSION=1.0.0
-
-WEATHER_BASE_URL=https://api.open-meteo.com/v1/forecast
-
-NEWS_API_KEY=
-
-OPENAI_API_KEY=
-
-GEMINI_API_KEY=
-
-OPENROUTER_API_KEY=
-
-OLLAMA_BASE_URL=http://localhost:11434
-```
-
----
-
-# ▶️ Run the Server
-
-```bash
+```powershell
 python server.py
 ```
 
-or
+The MCP server uses stdio, so it may appear to wait without printing a normal web page.
 
-```bash
+## 3. Run MCP Inspector
+
+```powershell
 mcp dev server.py
 ```
 
----
+Then open the Inspector URL printed in the terminal.
 
-# 🧪 Testing with MCP Inspector
+If you get `ModuleNotFoundError`, activate the virtual environment in the same PowerShell window before running the command.
 
-Launch Inspector
+## 4. Tools
 
-```bash
-mcp dev server.py
+### Calculator
+- `add`
+- `subtract`
+- `multiply`
+- `divide`
+- `percentage`
+
+### Date/time
+- `current_date`
+- `current_time`
+- `current_datetime`
+
+Default timezone is `Asia/Kolkata`. You can pass another IANA timezone such as `UTC` or `America/New_York`.
+
+### Weather
+
+```text
+get_current_weather(latitude=21.1702, longitude=72.8311)
 ```
 
-Open the provided localhost URL in your browser.
+Open-Meteo does not require an API key.
 
-Available tools will appear automatically.
+### News
 
-Example:
+Requires `NEWS_API_KEY`.
 
-```
-add(10,20)
-
-Result
-
-30
+```text
+top_news(topic="technology", country="in", limit=5)
 ```
 
----
+### Currency
 
-# 📚 Technology Stack
+```text
+convert_currency(amount=100, from_currency="USD", to_currency="INR")
+```
 
-### Backend
+Uses Frankfurter's public exchange-rate API.
 
-- Python 3.12+
+### AI chat
 
-### MCP
+Requires `GEMINI_API_KEY`.
 
-- Model Context Protocol SDK
+```text
+chat(message="Explain MCP in simple words")
+```
 
-### AI
+### Documents
 
-- OpenAI
-- Gemini
-- Ollama
-- OpenRouter
+```text
+read_document(path="C:\\path\\to\\file.pdf")
+index_document(path="C:\\path\\to\\file.pdf")
+search_knowledge(query="What is this document about?", top_k=5)
+```
 
-### APIs
+Supported: PDF, DOCX, TXT, MD, CSV, XLSX, JSON and basic image metadata.
 
-- Open-Meteo
-- News API
+## 5. Project structure
 
-### Database
+```text
+project_mcp/
+├── .env.example
+├── config.py
+├── server.py
+├── requirements.txt
+├── README.md
+├── tools/
+│   ├── calculator.py
+│   ├── chat.py
+│   ├── currency.py
+│   ├── datetime.py
+│   ├── documents.py
+│   ├── news.py
+│   ├── rag.py
+│   └── weather.py
+├── services/
+│   ├── ai_service.py
+│   ├── currency_service.py
+│   ├── document_service.py
+│   ├── rag_service.py
+│   ├── news_service.py
+│   └── weather_service.py
+└── tests/
+```
 
-- PostgreSQL
-- MongoDB
-- SQLite
+## Next stage: AI Agent
 
-### RAG
+The MCP server is now a strong tool layer. An **AI Agent** should normally live in an MCP client/agent application that:
+1. discovers tools with `tools/list`
+2. sends the available tools to the model
+3. lets the model choose a tool
+4. calls the selected MCP tool with `tools/call`
+5. feeds the result back to the model
+6. repeats until the final answer is ready
 
-- ChromaDB
-- FAISS
+This keeps the MCP server focused on reliable capabilities instead of mixing agent orchestration into every tool.
 
----
+## License
 
-# 🚀 Roadmap
-
-## Phase 1
-
-- ✅ Calculator
-- ✅ Date & Time
-- ✅ Modular Architecture
-
----
-
-## Phase 2
-
-- Weather API
-- News API
-- Currency API
-
----
-
-## Phase 3
-
-- AI Chat
-
----
-
-## Phase 4
-
-- PDF Reader
-- Excel Reader
-- Image Reader
-
----
-
-## Phase 5
-
-- PostgreSQL
-- MongoDB
-
----
-
-## Phase 6
-
-- RAG
-
----
-
-## Phase 7
-
-- AI Agent
-
----
-
-## Future Improvements
-
-- Authentication
-- Logging
-- Docker Support
-- Async Tools
-- Streaming Responses
-- Tool Permissions
-- Multi-Agent Support
-- Web Dashboard
-- REST API Gateway
-
----
-
-# 👨‍💻 Author
-
-**Raj Ashvinkumar Maheta**
-
-MCA Student | Python Developer | AI & MCP Enthusiast
-
----
-
-# ⭐ Support
-
-If you found this project useful:
-
-⭐ Star the repository
-
-🍴 Fork the project
-
-🐛 Report issues
-
-💡 Suggest improvements
-
----
-
-# 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-## 💙 Thank You
-
-Happy Coding 🚀
-
-Let's build the future of AI with MCP!
+MIT

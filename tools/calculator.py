@@ -1,49 +1,30 @@
-"""
-Calculator Tools
-----------------
-This file contains all calculator-related MCP tools.
-
-Workflow:
-Inspector
-    ↓
-MCP Server
-    ↓
-Calculator Tool
-    ↓
-Return Result
-"""
-
 from mcp.server.fastmcp import FastMCP
 
-# This function registers all calculator tools
-def register_calculator_tools(mcp: FastMCP):
 
+def register_calculator_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     def add(a: float, b: float) -> float:
-        """
-        Add two numbers.
-        """
+        """Add two numbers."""
         return a + b
 
     @mcp.tool()
     def subtract(a: float, b: float) -> float:
-        """
-        Subtract two numbers.
-        """
+        """Subtract b from a."""
         return a - b
 
     @mcp.tool()
     def multiply(a: float, b: float) -> float:
-        """
-        Multiply two numbers.
-        """
+        """Multiply two numbers."""
         return a * b
 
     @mcp.tool()
     def divide(a: float, b: float) -> float:
-        """
-        Divide two numbers.
-        """
+        """Divide a by b. Raises an error when b is zero."""
         if b == 0:
             raise ValueError("Cannot divide by zero.")
         return a / b
+
+    @mcp.tool()
+    def percentage(value: float, percent: float) -> float:
+        """Calculate a percentage of a value."""
+        return value * percent / 100

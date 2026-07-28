@@ -1,4 +1,10 @@
-.venv
+.venv/
 .env
-.idea
-__pycache__
+.env
+!.env
+.idea/
+.vscode/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+data/
